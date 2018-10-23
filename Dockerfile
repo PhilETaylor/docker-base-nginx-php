@@ -86,6 +86,7 @@ RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /etc/php/7.3
     && echo 'opcache.memory_consumption = 512M' >> /etc/php/7.3/conf.d/opcache.ini  \
     && echo 'opcache.max_accelerated_files = 1000000' >> /etc/php/7.3/conf.d/opcache.ini \
     && echo 'extension=redis' > /etc/php/7.3/conf.d/redis.ini \
+    && echo "default_socket_timeout=1200" >> /etc/php/7.3/php.ini \
 # Others
     && update-ca-certificates   \
     && mkdir -p /run/nginx/     \
