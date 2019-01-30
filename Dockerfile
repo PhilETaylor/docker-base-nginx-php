@@ -47,7 +47,9 @@ RUN apk  --no-cache update              \
     php7.3-tokenizer        \
     php7.3-dom              \
     php7.3-ctype            \
-    # php7.3-redis          \
+    php7.3-bcmath            \
+    php7.3-gmp            \
+    php7.3-redis          \
     php7.3-xml              \
     php7.3-simplexml        \
     php7.3-json             \
@@ -59,16 +61,6 @@ RUN apk  --no-cache update              \
     php7.3-xmlwriter        \
     php7.3-session          \
     php7.3-common
-
-RUN wget https://github.com/phpredis/phpredis/archive/4.2.0RC1.tar.gz \
-    && tar xfz 4.2.0RC1.tar.gz     \
-    && rm -r 4.2.0RC1.tar.gz       \
-    && cd phpredis-4.2.0RC1        \
-    && phpize                   \
-    && ./configure              \
-    && make                     \
-    && make install             \
-    && rm -Rf /phpredis-4.2.0RC1
 
 RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /etc/php/7.3/php.ini   \
     && sed -i 's/post_max_size = 8M/post_max_size = 64M/g' /etc/php/7.3/php.ini            \
