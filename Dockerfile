@@ -45,7 +45,7 @@ RUN docker-php-ext-install soap
 RUN docker-php-ext-configure zip --with-libzip 
 RUN docker-php-ext-install zip  
 RUN docker-php-ext-enable zip  
-RUN pecl install redis-4.0.2 
+RUN pecl install redis-4.2.0 
 RUN apk del buildDeps
 
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini 
@@ -69,6 +69,5 @@ RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/e
     && echo "default_socket_timeout=1200" >> /usr/local/etc/php/php.ini \
 # Others
     && mkdir -p /run/nginx/     \
-    && mkdir -p /var/log/nginx/
-
-     
+    && mkdir -p /var/log/nginx/ \
+    && rm -Rf /tmp/pear
