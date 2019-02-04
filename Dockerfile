@@ -1,5 +1,6 @@
 # docker build . --tag registry.myjoomla.com/base-nginx-php
 # docker push registry.myjoomla.com/base-nginx-php
+# test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
 
 FROM php:7.3.1-fpm-alpine3.8
 
@@ -32,8 +33,11 @@ RUN apk  add  --no-cache --update \
     gmp-dev\
     libxml2-dev\
     icu-dev \
-    icu 
+    icu \
+    fontconfig \
+    msttcorefonts-installer 
 
+RUN update-ms-fonts && fc-cache -f
 
 RUN docker-php-ext-install gmp 
 RUN docker-php-ext-install shmop 
@@ -71,3 +75,5 @@ RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/e
     && mkdir -p /run/nginx/     \
     && mkdir -p /var/log/nginx/ \
     && rm -Rf /tmp/pear
+
+
