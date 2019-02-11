@@ -1,7 +1,7 @@
 # docker build . --tag registry.myjoomla.com/base-nginx-php
 # docker push registry.myjoomla.com/base-nginx-php
 # test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
-
+#
 FROM php:7.3.2-fpm-alpine3.9
 #FROM registry.myjoomla.com/php-7.3.2-fpm-alpine3.9
 
