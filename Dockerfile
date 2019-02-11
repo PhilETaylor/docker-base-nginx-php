@@ -2,8 +2,8 @@
 # docker push registry.myjoomla.com/base-nginx-php
 # test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
 
-#FROM FROM php:7.3.1-fpm-alpine3.8
-FROM registry.myjoomla.com/php-7.3.2-fpm-alpine3.9
+FROM php:7.3.2-fpm-alpine3.9
+#FROM registry.myjoomla.com/php-7.3.2-fpm-alpine3.9
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
@@ -44,6 +44,7 @@ RUN docker-php-ext-install gmp
 RUN docker-php-ext-install shmop 
 RUN docker-php-ext-install opcache
 RUN docker-php-ext-install bcmath 
+RUN docker-php-ext-install intl 
 RUN docker-php-ext-install pdo_mysql 
 RUN docker-php-ext-install pcntl  
 RUN docker-php-ext-install soap
