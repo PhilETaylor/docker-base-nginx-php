@@ -36,6 +36,7 @@ RUN apk  add  --no-cache --update \
     icu-dev \
     icu \
     fontconfig \
+    libpng-dev \
     msttcorefonts-installer 
 
 RUN update-ms-fonts && fc-cache -f
@@ -51,7 +52,8 @@ RUN docker-php-ext-install soap
 RUN docker-php-ext-configure zip --with-libzip 
 RUN docker-php-ext-install zip  
 RUN docker-php-ext-enable zip  
-RUN pecl install redis-4.2.0 
+RUN pecl install redis-4.2.0
+RUN docker-php-ext-install gd
 RUN apk del buildDeps
 
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini 
