@@ -1,4 +1,4 @@
-# docker build . --tag registry.myjoomla.com/base-nginx-php
+# docker build . --no-cache --tag registry.myjoomla.com/base-nginx-php
 # docker push registry.myjoomla.com/base-nginx-php
 # test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
 #
@@ -227,56 +227,47 @@ CMD ["php-fpm"]
 
 # ==============
 
-RUN   apk update \
-    &&   apk add ca-certificates wget\
-    &&   update-ca-certificates
+RUN   apk update
 
 RUN apk  add  --no-cache --update --virtual  \
     # Base
     buildDeps \
     gcc \
     autoconf \
-    build-base 
- 
+    build-base
+
+
 RUN apk  add  --no-cache --update \
+    wget \
+    ca-certificates         \
     supervisor              \
-    sudo                           \
-    git                     \
+    libpng-dev              \
+    gmp-dev\
+    icu-dev \
+    zlib-dev\
+    libxml2-dev\
+    libzip-dev\
+    sudo                    \
     curl                    \
     htop                    \
     httpie                  \
-    nano                    \
     procps                  \
-    zlib-dev\
-    libzip-dev   \
     gnupg                   \
-    nginx  \
-    gmp-dev\
-    libxml2-dev\
-    icu-dev \
-    icu \
-    fontconfig \
-    msttcorefonts-installer 
+    nginx                   \
+    icu                     \
+    fontconfig              \
+    msttcorefonts-installer \
+    && pecl install redis-4.3.0 \
+    && update-ca-certificates && update-ms-fonts && fc-cache -f                        \
+    && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap \
+    && docker-php-ext-configure zip --with-libzip \
+    && docker-php-ext-install zip \
+#    && docker-php-ext-enable zip \
+    && apk del buildDeps \
+    && rm -rf /var/cache/apk/*
 
-RUN update-ms-fonts && fc-cache -f
-
-RUN docker-php-ext-install gmp 
-RUN docker-php-ext-install shmop 
-RUN docker-php-ext-install opcache
-RUN docker-php-ext-install bcmath 
-RUN docker-php-ext-install intl 
-RUN docker-php-ext-install pdo_mysql 
-RUN docker-php-ext-install pcntl  
-RUN docker-php-ext-install soap
-RUN docker-php-ext-configure zip --with-libzip 
-RUN docker-php-ext-install zip  
-RUN docker-php-ext-enable zip  
-RUN pecl install redis-4.2.0 
-RUN apk del buildDeps
-
-RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini 
-
-RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/etc/php/php.ini   \
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini\
+    && sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/etc/php/php.ini   \
     && sed -i 's/post_max_size = 8M/post_max_size = 64M/g' /usr/local/etc/php/php.ini            \
     && sed -i 's/log_errors = On/log_errors = Off/g' /usr/local/etc/php/php.ini                 \
     && sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /usr/local/etc/php/php.ini                 \
@@ -296,6 +287,7 @@ RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/e
 # Others
     && mkdir -p /run/nginx/     \
     && mkdir -p /var/log/nginx/ \
-    && rm -Rf /tmp/pear
+    && rm -Rf /tmp/pear \
+    && rm -rf /var/cache/apk/*
 
 
