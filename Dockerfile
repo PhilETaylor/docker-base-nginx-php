@@ -8,16 +8,10 @@ FROM php:7.3.3-fpm-alpine3.9
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
-RUN   apk update
+RUN apk update
 
-RUN apk  add  --no-cache --update --virtual  \
-    buildDeps   \
-    gcc         \
-    autoconf    \
-    build-base
-
-
-RUN apk add --no-cache --update \
+RUN apk add --no-cache --update  \
+    gcc autoconf build-base \
     wget                    \
     ca-certificates         \
     supervisor              \
@@ -41,13 +35,12 @@ RUN apk add --no-cache --update \
     && update-ca-certificates && update-ms-fonts && fc-cache -f                         \
     && docker-php-ext-configure zip --with-libzip                                       \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
-    && apk del buildDeps php-phpdbg --no-cache                                          \
+    && apk del gcc autoconf build-base php-phpdbg --no-cache                                          \
     && rm -rf /var/cache/apk/*                                                          \
     && rm -rf /var/cache/fontcache/*                                                    \
     && rm -rf /usr/src/php.tar.xz                                                       \
-    && rm -Rf /usr/local/bin/phpdbg 
-
-RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini                             \
+    && rm -Rf /usr/local/bin/phpdbg \
+    && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini                             \
     && sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/etc/php/php.ini   \
     && sed -i 's/post_max_size = 8M/post_max_size = 65M/g' /usr/local/etc/php/php.ini               \
     && sed -i 's/log_errors = On/log_errors = Off/g' /usr/local/etc/php/php.ini                     \
