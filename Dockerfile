@@ -10,8 +10,7 @@ MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
 RUN apk update
 
-RUN apk add --no-cache --update  \
-    gcc autoconf build-base \
+RUN apk add --no-cache \
     wget                    \
     ca-certificates         \
     supervisor              \
@@ -31,11 +30,13 @@ RUN apk add --no-cache --update  \
     icu                     \
     fontconfig              \
     msttcorefonts-installer \
+    && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 mpfr3 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && pecl install redis-4.3.0                                                         \
     && update-ca-certificates && update-ms-fonts && fc-cache -f                         \
     && docker-php-ext-configure zip --with-libzip                                       \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
-    && apk del gcc autoconf build-base php-phpdbg --no-cache                                          \
+    && docker-php-source delete \
+    && apk del --no-cache build-base .build-deps \
     && rm -rf /var/cache/apk/*                                                          \
     && rm -rf /var/cache/fontcache/*                                                    \
     && rm -rf /usr/src/php.tar.xz                                                       \
@@ -44,7 +45,7 @@ RUN apk add --no-cache --update  \
     && sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/etc/php/php.ini   \
     && sed -i 's/post_max_size = 8M/post_max_size = 65M/g' /usr/local/etc/php/php.ini               \
     && sed -i 's/log_errors = On/log_errors = Off/g' /usr/local/etc/php/php.ini                     \
-    && sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /usr/local/etc/php/php.ini                                                                                         \
+    && sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /usr/local/etc/php/php.ini       \
     && echo '[global]' > /usr/local/etc/php/conf.d/zz-docker.conf                           \
     && echo 'daemonize = no' >> /usr/local/etc/php/conf.d/zz-docker.conf                    \
     && echo '[www]' >> /usr/local/etc/php/conf.d/zz-docker.conf                             \
