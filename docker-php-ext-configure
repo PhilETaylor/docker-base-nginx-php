@@ -66,4 +66,8 @@ fi
 
 cd "$ext"
 phpize
+<<<<<<< HEAD
 ./configure "$@"
+=======
+./configure "$@"
+>>>>>>> master
