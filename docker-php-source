@@ -31,8 +31,4 @@ case "$1" in
 		usage
 		exit 1
 		;;
-<<<<<<< HEAD
 esac
-=======
-esac
->>>>>>> master

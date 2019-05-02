@@ -110,10 +110,5 @@ for module in $modules; do
 done
 
 if [ "$pm" = 'apk' ] && [ -n "$apkDel" ]; then
-<<<<<<< HEAD
-	apk del $apkDel
-fi
-=======
 	apk del --no-network $apkDel
 fi
->>>>>>> master
