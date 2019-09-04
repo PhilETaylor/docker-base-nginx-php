@@ -4,7 +4,7 @@
 # 458Mb 363MB
 
 
-FROM alpine:3.9
+FROM alpine:3.10
 
 # dependencies required for running "phpize"
 # these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
@@ -246,6 +246,7 @@ RUN apk add --no-cache \
     curl                    \
     htop                    \
     httpie                  \
+    postfix                 \
     procps                  \
     gnupg                   \
     nginx                   \
