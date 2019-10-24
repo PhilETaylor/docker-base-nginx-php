@@ -62,8 +62,8 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 ENV GPG_KEYS CBAF69F173A0FEA4B537F470D66C9593118BCCB6 F38252826ACD957EF380D39F2F7956BC5DA04B5D
 
-ENV PHP_VERSION 7.3.10
-ENV PHP_URL="https://www.php.net/distributions/php-7.3.10.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-7.3.10.tar.xz.asc"
+ENV PHP_VERSION 7.3.11
+ENV PHP_URL="https://www.php.net/distributions/php-7.3.11.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-7.3.11.tar.xz.asc"
 ENV PHP_SHA256="" PHP_MD5=""
 
 RUN set -xe; \
