@@ -30,6 +30,7 @@ RUN apk add --no-cache \
     curl                    \
     htop                    \
     httpie                  \
+    postfix                 \
     procps                  \
     gnupg                   \
     nginx                   \
