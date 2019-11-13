@@ -3,10 +3,16 @@
 # test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
 # 458Mb 363MB
 
-FROM php:7.3.3-fpm-alpine3.9
+FROM php:7.3.11-fpm-alpine3.9
 #FROM registry.myjoomla.com/php-7.3.2-fpm-alpine3.9
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
+
+RUN printf "%s%s%s\n" \
+    "http://nginx.org/packages/mainline/alpine/v" \
+    `egrep -o '^[0-9]+\.[0-9]+' /etc/alpine-release` \
+    "/main" \
+    | tee -a /etc/apk/repositories &&  curl -o /etc/apk/keys/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub
 
 RUN apk update
 
