@@ -3,8 +3,7 @@
 # test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
 # 458Mb 363MB
 
-FROM php:7.3.12-fpm-alpine3.10
-#FROM registry.myjoomla.com/php-7.3.2-fpm-alpine3.9
+FROM php:7.4.1-fpm-alpine3.10
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
