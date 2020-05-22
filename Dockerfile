@@ -3,7 +3,7 @@
 # test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
 # 458Mb 363MB
 
-FROM php:7.4.1-fpm-alpine3.10
+FROM php:7.4.6-fpm-alpine
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
@@ -33,13 +33,14 @@ RUN apk add --no-cache \
     procps                  \
     gnupg                   \
     nginx                   \
+    nginx-mod-http-nchan    \
     icu                     \
     fontconfig              \
     msttcorefonts-installer \
-    && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 mpfr3 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
+    && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && pecl install redis-4.3.0                                                         \
-    && update-ca-certificates && update-ms-fonts && fc-cache -f                         \
-    && docker-php-ext-configure zip --with-libzip                                       \
+    && update-ca-certificates                       \
+    && docker-php-ext-configure zip                                       \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
     && docker-php-source delete \
     && apk del --no-cache build-base .build-deps \
@@ -67,6 +68,7 @@ RUN apk add --no-cache \
     && mkdir -p /run/nginx/         \
     && mkdir -p /var/log/nginx/     \
     && rm -Rf /tmp/pear             \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /var/cache/apk/* \
+    && update-ms-fonts && fc-cache -f
 
 
