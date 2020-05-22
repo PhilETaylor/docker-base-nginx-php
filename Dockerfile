@@ -273,13 +273,14 @@ RUN apk add --no-cache \
     procps                  \
     gnupg                   \
     nginx                   \
+    nginx-mod-http-nchan   \
     icu                     \
     fontconfig              \
     msttcorefonts-installer \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 mpfr4 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && pecl install redis-4.3.0                                                         \
     && update-ca-certificates && update-ms-fonts && fc-cache -f                         \
-    && docker-php-ext-configure zip --with-libzip                                       \
+    && docker-php-ext-configure zip                                        \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip mbstring \
     && docker-php-source delete \
     && apk del --no-cache build-base .build-deps \
