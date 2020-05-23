@@ -11,6 +11,8 @@
 
 FROM alpine:latest
 
+RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories
+
 ENV PHP_VERSION 7.4.6
 ENV PHP_URL="https://www.php.net/get/php-7.4.6.tar.xz/from/this/mirror" PHP_ASC_URL=""
 ENV PHP_SHA256="" PHP_MD5=""
