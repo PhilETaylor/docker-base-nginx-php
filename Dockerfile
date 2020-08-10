@@ -11,10 +11,10 @@
 
 FROM alpine:latest
 
-RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories
+#RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories
 
-ENV PHP_VERSION 7.4.6
-ENV PHP_URL="https://www.php.net/get/php-7.4.6.tar.xz/from/this/mirror" PHP_ASC_URL=""
+ENV PHP_VERSION 7.4.9
+ENV PHP_URL="https://www.php.net/get/php-7.4.9.tar.xz/from/this/mirror" PHP_ASC_URL=""
 ENV PHP_SHA256="" PHP_MD5=""
 
 
@@ -27,7 +27,7 @@ ENV PHPIZE_DEPS \
         g++ \
         gcc \
         libc-dev \
-        oniguruma-dev \  
+        oniguruma-dev \
         make \
         pkgconf \
         re2c
@@ -280,9 +280,10 @@ RUN apk add --no-cache \
     fontconfig              \
     msttcorefonts-installer \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 mpfr4 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
-    && pecl install redis-4.3.0                                                         \
+    && wget https://pecl.php.net/get/redis-5.3.1.tgz && pecl install redis-5.3.1.tgz                                                  \
     && update-ca-certificates && update-ms-fonts && fc-cache -f                         \
-    && docker-php-ext-configure zip                                        \
+    && docker-php-ext-configure zip
+    && docker-php-ext-enable redis \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip mbstring \
     && docker-php-source delete \
     && apk del --no-cache build-base .build-deps \
