@@ -3,11 +3,11 @@
 # test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
 # 458Mb 363MB
 
-FROM php:7.4.6-fpm-alpine3.11
+FROM php:7.4.9-fpm-alpine3.12
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
-RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories
+# RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories
 
 RUN apk update
 
@@ -34,9 +34,10 @@ RUN apk add --no-cache \
     fontconfig              \
     msttcorefonts-installer \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
-    && pecl install redis-4.3.0                                                         \
-    && update-ca-certificates                       \
-    && docker-php-ext-configure zip                                       \
+    && update-ca-certificates \
+    && wget https://pecl.php.net/get/redis-5.3.1.tgz && pecl install redis-5.3.1.tgz                                                    \
+    && docker-php-ext-enable redis \
+    && docker-php-ext-configure zip \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
     && docker-php-source delete \
     && apk del --no-cache build-base .build-deps \
