@@ -11,8 +11,6 @@
 
 FROM alpine:latest
 
-#RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories
-
 ENV PHP_VERSION 7.4.9
 ENV PHP_URL="https://www.php.net/get/php-7.4.9.tar.xz/from/this/mirror" PHP_ASC_URL=""
 ENV PHP_SHA256="" PHP_MD5=""
@@ -275,16 +273,16 @@ RUN apk add --no-cache \
     procps                  \
     gnupg                   \
     nginx                   \
-    nginx-mod-http-nchan   \
+    nginx-mod-http-nchan    \
     icu                     \
     fontconfig              \
     msttcorefonts-installer \
-    && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 mpfr4 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
-    && wget https://pecl.php.net/get/redis-5.3.1.tgz && pecl install redis-5.3.1.tgz                                                  \
-    && update-ca-certificates && update-ms-fonts && fc-cache -f                         \
-    && docker-php-ext-configure zip
+    && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
+    && update-ca-certificates \
+    && wget https://pecl.php.net/get/redis-5.3.1.tgz && pecl install redis-5.3.1.tgz                                                    \
     && docker-php-ext-enable redis \
-    && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip mbstring \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
     && docker-php-source delete \
     && apk del --no-cache build-base .build-deps \
     && rm -rf /var/cache/apk/*                                                          \
@@ -311,7 +309,8 @@ RUN apk add --no-cache \
     && mkdir -p /run/nginx/         \
     && mkdir -p /var/log/nginx/     \
     && rm -Rf /tmp/pear             \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /var/cache/apk/* \
+    && update-ms-fonts && fc-cache -f
 
 
 
