@@ -1,6 +1,6 @@
-# docker build . --tag registry.myjoomla.com/base-nginx-php
-# docker push registry.myjoomla.com/base-nginx-php
-# test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
+# docker build . --tag registry.digitalocean.com/mysites/base-nginx-php
+# docker push registry.digitalocean.com/mysites/base-nginx-php
+# test: docker run -it --rm registry.digitalocean.com/mysites/base-nginx-php sh
 # 458Mb 363MB
 
 #
@@ -11,8 +11,8 @@
 
 FROM alpine:latest
 
-ENV PHP_VERSION 7.4.10
-ENV PHP_URL="https://www.php.net/get/php-7.4.10.tar.xz/from/this/mirror" PHP_ASC_URL=""
+ENV PHP_VERSION 7.4.11
+ENV PHP_URL="https://www.php.net/get/php-7.4.11.tar.xz/from/this/mirror" PHP_ASC_URL=""
 ENV PHP_SHA256="" PHP_MD5=""
 
 
@@ -279,8 +279,8 @@ RUN apk add --no-cache \
     msttcorefonts-installer \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && update-ca-certificates \
-    && wget https://pecl.php.net/get/redis-5.3.1.tgz && pecl install redis-5.3.1.tgz                                                    \
-    && docker-php-ext-enable redis \
+    && wget https://pecl.php.net/get/redis-5.3.2.tgz && pecl install redis-5.3.2.tgz                                                    \
+#    && docker-php-ext-enable redis \
     && docker-php-ext-configure zip \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
     && docker-php-source delete \
@@ -298,13 +298,11 @@ RUN apk add --no-cache \
     && echo 'daemonize = no' >> /usr/local/etc/php/conf.d/zz-docker.conf                    \
     && echo '[www]' >> /usr/local/etc/php/conf.d/zz-docker.conf                             \
     && echo 'listen=9000' >> /usr/local/etc/php/conf.d/zz-docker.conf                       \
-    && echo 'extension=redis' > /usr/local/etc/php/conf.d/redis.ini                         \
     && echo 'realpath_cache_size=2048M' > /usr/local/etc/php/conf.d/pathcache.ini           \
     && echo 'realpath_cache_ttl=7200' >> /usr/local/etc/php/conf.d/pathcache.ini            \
     && echo '[opcache]' > /usr/local/etc/php/conf.d/opcache.ini                             \
     && echo 'opcache.memory_consumption = 512M' >> /usr/local/etc/php/conf.d/opcache.ini    \
     && echo 'opcache.max_accelerated_files = 1000000' >> /usr/local/etc/php/conf.d/opcache.ini  \
-    && echo 'extension=redis' > /usr/local/etc/php/conf.d/redis.ini                             \
     && echo "default_socket_timeout=1200" >> /usr/local/etc/php/php.ini                         \
     && mkdir -p /run/nginx/         \
     && mkdir -p /var/log/nginx/     \
