@@ -11,8 +11,8 @@
 
 FROM alpine:latest
 
-ENV PHP_VERSION 7.4.11
-ENV PHP_URL="https://www.php.net/get/php-7.4.11.tar.xz/from/this/mirror" PHP_ASC_URL=""
+ENV PHP_VERSION 8.0.0RC3
+ENV PHP_URL="https://downloads.php.net/~carusogabriel/php-8.0.0RC3.tar.xz" PHP_ASC_URL=""
 ENV PHP_SHA256="" PHP_MD5=""
 
 
