@@ -1,4 +1,4 @@
-# docker build . --tag registry.digitalocean.com/mysites/base-nginx-php
+# docker build . --tag registry.digitalocean.com/mysites/base-nginx-php:php8
 # docker push registry.digitalocean.com/mysites/base-nginx-php
 # test: docker run -it --rm registry.digitalocean.com/mysites/base-nginx-php sh
 # 458Mb 363MB
@@ -12,9 +12,11 @@
 FROM alpine:latest
 
 ENV PHP_VERSION 8.0.0RC3
-ENV PHP_URL="https://downloads.php.net/~carusogabriel/php-8.0.0RC3.tar.xz" PHP_ASC_URL=""
+ENV PHP_URL="https://github.com/php/php-src/archive/master.zip" PHP_ASC_URL=""
 ENV PHP_SHA256="" PHP_MD5=""
 
+# RUN mkdir -p /usr/src/php
+ADD php-src-master /usr/src/php
 
 # dependencies required for running "phpize"
 # these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
@@ -28,7 +30,7 @@ ENV PHPIZE_DEPS \
         oniguruma-dev \
         make \
         pkgconf \
-        re2c
+        re2c bison curl-dev
 
 # persistent / runtime deps
 RUN apk add --no-cache \
@@ -82,7 +84,6 @@ RUN set -eux; \
     mkdir -p /usr/src; \
     cd /usr/src; \
     \
-    curl -fsSL -o php.tar.xz "$PHP_URL"; \
     \
     if [ -n "$PHP_SHA256" ]; then \
         echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
@@ -125,9 +126,9 @@ RUN set -eux; \
         CPPFLAGS="$PHP_CPPFLAGS" \
         LDFLAGS="$PHP_LDFLAGS" \
     ; \
-    docker-php-source extract; \
     cd /usr/src/php; \
     gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
+    ./buildconf; \
     ./configure \
         --build="$gnuArch" \
         --with-config-file-path="$PHP_INI_DIR" \
@@ -177,7 +178,6 @@ RUN set -eux; \
     cp -v php.ini-* "$PHP_INI_DIR/"; \
     \
     cd /; \
-    docker-php-source delete; \
     \
     runDeps="$( \
         scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
@@ -280,14 +280,11 @@ RUN apk add --no-cache \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && update-ca-certificates \
     && wget https://pecl.php.net/get/redis-5.3.2.tgz && pecl install redis-5.3.2.tgz                                                    \
-#    && docker-php-ext-enable redis \
     && docker-php-ext-configure zip \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
-    && docker-php-source delete \
     && apk del --no-cache build-base .build-deps \
     && rm -rf /var/cache/apk/*                                                          \
     && rm -rf /var/cache/fontcache/*                                                    \
-    && rm -rf /usr/src/php.tar.xz                                                       \
     && rm -Rf /usr/local/bin/phpdbg \
     && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini                             \
     && sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/etc/php/php.ini   \
@@ -308,7 +305,8 @@ RUN apk add --no-cache \
     && mkdir -p /var/log/nginx/     \
     && rm -Rf /tmp/pear             \
     && rm -rf /var/cache/apk/* \
-    && update-ms-fonts && fc-cache -f
+    && update-ms-fonts && fc-cache -f \
+    && rm -Rf /usr/src/php
 
 
 
