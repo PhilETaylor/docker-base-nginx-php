@@ -11,13 +11,6 @@
 
 FROM alpine:latest
 
-ENV PHP_VERSION 8.0.0RC3
-ENV PHP_URL="https://github.com/php/php-src/archive/master.zip" PHP_ASC_URL=""
-ENV PHP_SHA256="" PHP_MD5=""
-
-# RUN mkdir -p /usr/src/php
-ADD php-src-master /usr/src/php
-
 # dependencies required for running "phpize"
 # these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
 ENV PHPIZE_DEPS \
@@ -36,10 +29,17 @@ ENV PHPIZE_DEPS \
 RUN apk add --no-cache \
         ca-certificates \
         curl \
+         git \
+        unzip \
         tar \
         xz \
 # https://github.com/docker-library/php/issues/494
         openssl
+
+
+RUN mkdir -p /usr/src/php
+RUN git clone https://github.com/php/php-src.git /usr/src/php && cd /usr/src/php && git checkout PHP-8.0 && rm -Rf /usr/src/php/.git
+
 
 # ensure www-data user exists
 RUN set -eux; \
@@ -73,37 +73,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=www-data --with-fpm-gr
 ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
 ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
-
-ENV GPG_KEYS 42670A7FE4D0441C8E4632349E4FDC074A4EF02D 5A52880781F755608BF815FC910DEB46F53EA312
-
-
-RUN set -eux; \
-    \
-    apk add --no-cache --virtual .fetch-deps gnupg; \
-    \
-    mkdir -p /usr/src; \
-    cd /usr/src; \
-    \
-    \
-    if [ -n "$PHP_SHA256" ]; then \
-        echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
-    fi; \
-    if [ -n "$PHP_MD5" ]; then \
-        echo "$PHP_MD5 *php.tar.xz" | md5sum -c -; \
-    fi; \
-    \
-    if [ -n "$PHP_ASC_URL" ]; then \
-        curl -fsSL -o php.tar.xz.asc "$PHP_ASC_URL"; \
-        export GNUPGHOME="$(mktemp -d)"; \
-        for key in $GPG_KEYS; do \
-            gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-        done; \
-        gpg --batch --verify php.tar.xz.asc php.tar.xz; \
-        gpgconf --kill all; \
-        rm -rf "$GNUPGHOME"; \
-    fi; \
-    \
-    apk del --no-network .fetch-deps
 
 COPY docker-php-source /usr/local/bin/
 
