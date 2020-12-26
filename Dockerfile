@@ -188,7 +188,6 @@ RUN set -eux; \
     } | tee php-fpm.d/zz-docker.conf; \
     apk update; \
     apk add --no-cache \
-    wget                    \
     ca-certificates         \
     supervisor              \
     libpng-dev              \
@@ -199,15 +198,12 @@ RUN set -eux; \
     libzip-dev              \
     sudo                    \
     curl                    \
-    htop                    \
-    httpie                  \
     postfix                 \
     procps                  \
     gnupg                   \
     nginx                   \
     nginx-mod-http-nchan    \
     icu                     \
-    fontconfig              \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && update-ca-certificates \
     && wget https://pecl.php.net/get/redis-5.3.2.tgz && pecl install redis-5.3.2.tgz                                                    \
@@ -236,7 +232,7 @@ RUN set -eux; \
     && mkdir -p /var/log/nginx/     \
     && rm -Rf /tmp/pear             \
     && rm -rf /var/cache/apk/* \
-    && rm -Rf /usr/src/php
+    && rm -Rf /usr/src/php 
 
 # Override stop signal to stop process gracefully
 # https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
