@@ -208,7 +208,6 @@ RUN set -eux; \
     nginx-mod-http-nchan    \
     icu                     \
     fontconfig              \
-    msttcorefonts-installer \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && update-ca-certificates \
     && wget https://pecl.php.net/get/redis-5.3.2.tgz && pecl install redis-5.3.2.tgz                                                    \
@@ -237,7 +236,6 @@ RUN set -eux; \
     && mkdir -p /var/log/nginx/     \
     && rm -Rf /tmp/pear             \
     && rm -rf /var/cache/apk/* \
-    && update-ms-fonts && fc-cache -f \
     && rm -Rf /usr/src/php
 
 # Override stop signal to stop process gracefully
