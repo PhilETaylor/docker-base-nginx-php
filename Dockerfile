@@ -206,7 +206,7 @@ RUN set -eux; \
     icu                     \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && update-ca-certificates \
-    && wget https://pecl.php.net/get/redis-5.3.2.tgz && pecl install redis-5.3.2.tgz                                                    \
+    && wget https://pecl.php.net/get/redis-5.3.3.tgz && pecl install redis-5.3.3.tgz                                                    \
     && docker-php-ext-configure zip \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
     && apk del --no-cache build-base .build-deps \
@@ -232,6 +232,8 @@ RUN set -eux; \
     && mkdir -p /var/log/nginx/     \
     && rm -Rf /tmp/pear             \
     && rm -rf /var/cache/apk/* \
+    && rm -rf /usr/src/php.tar.xz                                                       \
+    && rm -Rf /usr/local/bin/phpdbg \
     && rm -Rf /usr/src/php
 
 # Override stop signal to stop process gracefully
