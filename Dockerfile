@@ -23,6 +23,7 @@ RUN apk add --no-cache \
     libzip-dev              \
     sudo                    \
     curl                    \
+    git                     \
     htop                    \
     httpie                  \
     postfix                 \
@@ -31,7 +32,7 @@ RUN apk add --no-cache \
     nginx                   \
     nginx-mod-http-nchan    \
     icu                     \
-    && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
+    && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg\
     && update-ca-certificates \
     && wget https://pecl.php.net/get/redis-5.3.4.tgz && pecl install redis-5.3.4.tgz                                                    \
     && docker-php-ext-configure zip \
