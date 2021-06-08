@@ -31,19 +31,14 @@ RUN apk add --no-cache \
     nginx                   \
     nginx-mod-http-nchan    \
     icu                     \
-    fontconfig              \
-    msttcorefonts-installer \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && update-ca-certificates \
     && wget https://pecl.php.net/get/redis-5.3.4.tgz && pecl install redis-5.3.4.tgz                                                    \
-    && docker-php-ext-enable redis \
     && docker-php-ext-configure zip \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
-    && docker-php-source delete \
     && apk del --no-cache build-base .build-deps \
     && rm -rf /var/cache/apk/*                                                          \
     && rm -rf /var/cache/fontcache/*                                                    \
-    && rm -rf /usr/src/php.tar.xz                                                       \
     && rm -Rf /usr/local/bin/phpdbg \
     && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini                             \
     && sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 64M/g' /usr/local/etc/php/php.ini   \
@@ -54,16 +49,14 @@ RUN apk add --no-cache \
     && echo 'daemonize = no' >> /usr/local/etc/php/conf.d/zz-docker.conf                    \
     && echo '[www]' >> /usr/local/etc/php/conf.d/zz-docker.conf                             \
     && echo 'listen=9000' >> /usr/local/etc/php/conf.d/zz-docker.conf                       \
-    && echo 'extension=redis' > /usr/local/etc/php/conf.d/redis.ini                         \
     && echo 'realpath_cache_size=2048M' > /usr/local/etc/php/conf.d/pathcache.ini           \
     && echo 'realpath_cache_ttl=7200' >> /usr/local/etc/php/conf.d/pathcache.ini            \
     && echo '[opcache]' > /usr/local/etc/php/conf.d/opcache.ini                             \
     && echo 'opcache.memory_consumption = 512M' >> /usr/local/etc/php/conf.d/opcache.ini    \
     && echo 'opcache.max_accelerated_files = 1000000' >> /usr/local/etc/php/conf.d/opcache.ini  \
-    && echo 'extension=redis' > /usr/local/etc/php/conf.d/redis.ini                             \
     && echo "default_socket_timeout=1200" >> /usr/local/etc/php/php.ini                         \
     && mkdir -p /run/nginx/         \
     && mkdir -p /var/log/nginx/     \
     && rm -Rf /tmp/pear             \
     && rm -rf /var/cache/apk/* \
-    && update-ms-fonts && fc-cache -f
+    && rm -Rf /usr/src/php
