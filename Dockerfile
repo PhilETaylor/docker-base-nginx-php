@@ -1,9 +1,9 @@
-# docker build . --no-cache --tag registry.myjoomla.com/base-nginx-php
-# docker push registry.myjoomla.com/base-nginx-php
-# test: docker run -it --rm registry.myjoomla.com/base-nginx-php sh
+# docker build . --no-cache --tag philetaylor/base-nginx-php
+# docker push philetaylor/base-nginx-php
+# test: docker run -it --rm philetaylor/base-nginx-php  sh
 # 458Mb 363MB
 
-FROM php:7.4.9-fpm-alpine3.12
+FROM php:8-fpm-alpine3.13
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
@@ -35,7 +35,7 @@ RUN apk add --no-cache \
     msttcorefonts-installer \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && update-ca-certificates \
-    && wget https://pecl.php.net/get/redis-5.3.1.tgz && pecl install redis-5.3.1.tgz                                                    \
+    && wget https://pecl.php.net/get/redis-5.3.4.tgz && pecl install redis-5.3.4.tgz                                                    \
     && docker-php-ext-enable redis \
     && docker-php-ext-configure zip \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
