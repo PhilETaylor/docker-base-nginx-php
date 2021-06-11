@@ -7,8 +7,6 @@ FROM php:8-fpm-alpine3.13
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
-# RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories
-
 RUN apk update
 
 RUN apk add --no-cache \
@@ -33,6 +31,7 @@ RUN apk add --no-cache \
     nginx-mod-http-nchan    \
     icu                     \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg\
+    && apk upgrade \
     && update-ca-certificates \
     && wget https://pecl.php.net/get/redis-5.3.4.tgz && pecl install redis-5.3.4.tgz                                                    \
     && docker-php-ext-configure zip \
