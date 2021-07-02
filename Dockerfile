@@ -44,11 +44,16 @@ RUN apk add --no-cache \
     && sed -i 's/log_errors = On/log_errors = Off/g' /usr/local/etc/php/php.ini                     \
     && sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /usr/local/etc/php/php.ini       \
     && echo '[global]' > /usr/local/etc/php-fpm.d/zz-docker.conf                           \
+    && echo 'error_log = /proc/self/fd/2' >> /usr/local/etc/php-fpm.d/zz-docker.conf                    \
+    && echo 'log_limit = 8192' >> /usr/local/etc/php-fpm.d/zz-docker.conf                    \
     && echo 'daemonize = no' >> /usr/local/etc/php-fpm.d/zz-docker.conf                    \
     && echo 'log_level = alert' >> /usr/local/etc/php-fpm.d/zz-docker.conf                    \
     && echo '[www]' >> /usr/local/etc/php-fpm.d/zz-docker.conf                             \
     && echo 'listen=9000' >> /usr/local/etc/php-fpm.d/zz-docker.conf                       \
-    && echo 'access.log=' >> /usr/local/etc/php-fpm.d/zz-docker.conf                       \
+    && echo ';access.log=' >> /usr/local/etc/php-fpm.d/zz-docker.conf                       \
+    && echo 'clear_env = no' >> /usr/local/etc/php-fpm.d/zz-docker.conf                       \
+    && echo 'catch_workers_output = yes' >> /usr/local/etc/php-fpm.d/zz-docker.conf                       \
+    && echo 'decorate_workers_output = no' >> /usr/local/etc/php-fpm.d/zz-docker.conf                       \
     && echo 'realpath_cache_size=2048M' > /usr/local/etc/php/conf.d/pathcache.ini           \
     && echo 'realpath_cache_ttl=7200' >> /usr/local/etc/php/conf.d/pathcache.ini            \
     && echo '[opcache]' > /usr/local/etc/php/conf.d/opcache.ini                             \
@@ -59,5 +64,6 @@ RUN apk add --no-cache \
     && mkdir -p /run/nginx/         \
     && mkdir -p /var/log/nginx/     \
     && rm -Rf /tmp/pear             \
+    && rm -Rf /usr/local/etc/php-fpm.d/docker.conf             \
     && rm -rf /var/cache/apk/* \
     && rm -Rf /usr/src/php
