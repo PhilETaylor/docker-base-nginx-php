@@ -12,7 +12,7 @@ RUN apk update
 RUN apk add --no-cache \
     wget                    \
     ca-certificates         \
-    supervisor              \
+    runit                   \
     libpng-dev              \
     gmp-dev                 \
     icu-dev                 \
@@ -22,8 +22,6 @@ RUN apk add --no-cache \
     sudo                    \
     curl                    \
     git                     \
-    htop                    \
-    httpie                  \
     postfix                 \
     procps                  \
     gnupg                   \
@@ -45,13 +43,16 @@ RUN apk add --no-cache \
     && sed -i 's/post_max_size = 8M/post_max_size = 65M/g' /usr/local/etc/php/php.ini               \
     && sed -i 's/log_errors = On/log_errors = Off/g' /usr/local/etc/php/php.ini                     \
     && sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /usr/local/etc/php/php.ini       \
-    && echo '[global]' > /usr/local/etc/php/conf.d/zz-docker.conf                           \
-    && echo 'daemonize = no' >> /usr/local/etc/php/conf.d/zz-docker.conf                    \
-    && echo '[www]' >> /usr/local/etc/php/conf.d/zz-docker.conf                             \
-    && echo 'listen=9000' >> /usr/local/etc/php/conf.d/zz-docker.conf                       \
+    && echo '[global]' > /usr/local/etc/php-fpm.d/zz-docker.conf                           \
+    && echo 'daemonize = no' >> /usr/local/etc/php-fpm.d/zz-docker.conf                    \
+    && echo 'log_level = alert' >> /usr/local/etc/php-fpm.d/zz-docker.conf                    \
+    && echo '[www]' >> /usr/local/etc/php-fpm.d/zz-docker.conf                             \
+    && echo 'listen=9000' >> /usr/local/etc/php-fpm.d/zz-docker.conf                       \
+    && echo 'access.log=' >> /usr/local/etc/php-fpm.d/zz-docker.conf                       \
     && echo 'realpath_cache_size=2048M' > /usr/local/etc/php/conf.d/pathcache.ini           \
     && echo 'realpath_cache_ttl=7200' >> /usr/local/etc/php/conf.d/pathcache.ini            \
     && echo '[opcache]' > /usr/local/etc/php/conf.d/opcache.ini                             \
+    && echo 'opcache.enable_cli = 1' >> /usr/local/etc/php/conf.d/opcache.ini    \
     && echo 'opcache.memory_consumption = 512M' >> /usr/local/etc/php/conf.d/opcache.ini    \
     && echo 'opcache.max_accelerated_files = 1000000' >> /usr/local/etc/php/conf.d/opcache.ini  \
     && echo "default_socket_timeout=1200" >> /usr/local/etc/php/php.ini                         \
