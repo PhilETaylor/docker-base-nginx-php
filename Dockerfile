@@ -1,6 +1,6 @@
-# docker build . --tag registry.digitalocean.com/mysites/base-nginx-php
-# docker push registry.digitalocean.com/mysites/base-nginx-php
-# test: docker run -it --rm registry.digitalocean.com/mysites/base-nginx-php sh
+# docker build . --no-cache --tag philetaylor/base-nginx-php
+# docker push philetaylor/base-nginx-php
+# test: docker run -it --rm philetaylor/base-nginx-php php -v
 # 458Mb 363MB
 
 #
@@ -11,8 +11,8 @@
 
 FROM alpine:latest
 
-ENV PHP_VERSION 7.4.11
-ENV PHP_URL="https://www.php.net/get/php-7.4.11.tar.xz/from/this/mirror" PHP_ASC_URL=""
+ENV PHP_VERSION 8.0.9
+ENV PHP_URL="https://www.php.net/get/php-8.0.9.tar.xz/from/this/mirror" PHP_ASC_URL=""
 ENV PHP_SHA256="" PHP_MD5=""
 
 
@@ -279,7 +279,7 @@ RUN apk add --no-cache \
     msttcorefonts-installer \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg \
     && update-ca-certificates \
-    && wget https://pecl.php.net/get/redis-5.3.2.tgz && pecl install redis-5.3.2.tgz                                                    \
+    && wget https://pecl.php.net/get/redis-5.3.4.tgz && pecl install redis-5.3.4.tgz                                                    \
 #    && docker-php-ext-enable redis \
     && docker-php-ext-configure zip \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \
