@@ -1,4 +1,4 @@
-# docker build . --no-cache --tag philetaylor/base-nginx-php
+# docker buildx build . --platform linux/amd64,linux/arm64 --no-cache --push --tag philetaylor/base-nginx-php
 # docker push philetaylor/base-nginx-php
 # test: docker run -it --rm philetaylor/base-nginx-php  sh
 # 458Mb 363MB
