@@ -1,9 +1,4 @@
-# docker buildx build . --platform linux/amd64,linux/arm64 --no-cache --push --tag philetaylor/base-nginx-php
-# docker push philetaylor/base-nginx-php
-# test: docker run -it --rm philetaylor/base-nginx-php  sh
-# 458Mb 363MB
-
-FROM php:8-fpm-alpine3.13
+FROM php:8-fpm-alpine3.14
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
