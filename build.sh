@@ -10,8 +10,8 @@ if [[ `uname -m` == 'arm64' ]]; then
   # RUN THIS ON Intel Mac
   # docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 1234:1234 bobrik/socat TCP-LISTEN:1234,fork UNIX-CONNECT:/var/run/docker.sock
 
-  #  docker buildx create --name base-nginx-php --use --platform linux/arm64
-  #  docker buildx create --name base-nginx-php --append tcp://192.168.1.70:1234 --platform linux/amd64
+  docker buildx create --name base-nginx-php --use --platform linux/arm64
+  docker buildx create --name base-nginx-php --append tcp://192.168.1.70:1234 --platform linux/amd64
 
   #  docker buildx build --platform linux/arm64 --no-cache --push --tag philetaylor/base-nginx-php:latest
   docker buildx build . --platform linux/amd64,linux/arm64 --no-cache --push --tag philetaylor/base-nginx-php:latest
@@ -25,10 +25,10 @@ if [[ `uname -m` != 'arm64' ]]; then
   # RUN THIS ON M1 Mac
   # docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 1234:1234 bobrik/socat TCP-LISTEN:1234,fork UNIX-CONNECT:/var/run/docker.sock
 
-  #  docker buildx create --name base-nginx-php --use --platform linux/amd64
-  #  docker buildx create --name base-nginx-php --append tcp://192.168.1.70:1234 --platform linux/arm64
+  docker buildx create --name base-nginx-php --use --platform linux/amd64
+  docker buildx create --name base-nginx-php --append tcp://192.168.1.70:1234 --platform linux/arm64
 
-  docker buildx build . --platform linux/amd64 --no-cache --push --tag philetaylor/base-nginx-php:latest
+  docker buildx build . --platform linux/amd64,linux/arm64 --no-cache --push --tag philetaylor/base-nginx-php:latest
 fi
 
 docker pull philetaylor/base-nginx-php:latest
