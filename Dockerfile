@@ -26,7 +26,7 @@ RUN apk add --no-cache \
     && apk add --no-cache --virtual .build-deps m4 libbz2 perl pkgconf dpkg-dev libmagic file libgcc dpkg libstdc++ binutils gmp isl libgomp libatomic mpc1 gcc libc-dev musl-dev autoconf g++ re2c make build-base php-phpdbg\
     && apk upgrade \
     && update-ca-certificates \
-    && wget https://pecl.php.net/get/redis-5.3.6.tgz && pecl install redis-5.3.6.tgz                                                    \
+    && wget https://pecl.php.net/get/redis-5.3.7.tgz && pecl install redis-5.3.7.tgz                                                    \
     && echo "extension=redis.so" > /usr/local/etc/php/conf.d/docker-php-ext-redis.ini \
     && docker-php-ext-configure zip \
     && docker-php-ext-install gd gmp shmop opcache bcmath intl pdo_mysql pcntl soap zip \

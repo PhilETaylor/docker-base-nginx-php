@@ -1,4 +1,4 @@
-docker pull php:8.1.2-fpm-alpine3.15
+docker pull php:8-fpm-alpine3.15
 
 docker buildx rm base-nginx-php
 
