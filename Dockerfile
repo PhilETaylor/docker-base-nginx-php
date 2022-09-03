@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine3.15
+FROM php:8.2.0RC1-fpm-alpine3.15
 
 MAINTAINER Phil Taylor <phil@phil-taylor.com>
 
