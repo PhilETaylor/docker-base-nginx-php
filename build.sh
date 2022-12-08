@@ -1,4 +1,4 @@
-docker pull php:8-fpm-alpine3.15
+docker pull php:8.2.0-fpm-alpine3.16
 
 docker buildx rm base-nginx-php
 
@@ -10,5 +10,4 @@ echo "STARTING BUILDING ON AN M1 MAC"
 docker buildx create --name base-nginx-php --use --platform linux/arm64
 docker buildx create --name base-nginx-php --append tcp://159.65.95.228:1234 --platform linux/amd64
 
-#  docker buildx build --platform linux/arm64 --no-cache --push --tag philetaylor/base-nginx-php:latest
 docker buildx build . --platform linux/amd64,linux/arm64 --no-cache --push --tag philetaylor/base-nginx-php:latest
